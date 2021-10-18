@@ -54,22 +54,4 @@ jobs:
       - run: npm run production
       - run: rm -rf node_modules vendor
 
-      - name: SSH Server Deploy
-        uses: kostya-ten/ssh-server-deploy@v3
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          port: ${{ secrets.SERVER_PORT }}
-          username: ${{ secrets.SERVER_USERNAME }}
-          password: ${{ secrets.SERVER_PASSWORD }}
-          scp_source: ./*
-          scp_target: ${{ secrets.SERVER_PATH }}
-          before_script: cd ${{ secrets.SERVER_PATH }}
-            && chmod -R 777 storage bootstrap/cache
-          after_script: cd ${{ secrets.SERVER_PATH }}
-            && rm -rf vendor
-            && php composer install --optimize-autoloader --no-dev --prefer-dist --no-interaction
-            && php artisan optimize:clear
-            && php artisan optimize
-            && php artisan view:cache
-            && php artisan event:cache
-            && php artisan migrate --force
+   
